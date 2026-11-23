@@ -1,8 +1,10 @@
-
 name: Build Ostath Mohammed APK
 
 on:
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -25,7 +27,7 @@ jobs:
       - name: Set up Android
         uses: android-actions/setup-android@v3
         with:   { packages: '' }
-          
+
       - name: Install SDK
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
@@ -40,3 +42,10 @@ jobs:
         with:
           name: Ostath-Mohammed-APK
           path: ostath-mohammed-android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Ostath Mohammed v${{ github.run_number }}
+          files: ostath-mohammed-android/app/build/outputs/apk/debug/app-debug.apk
